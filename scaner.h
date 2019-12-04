@@ -1,4 +1,5 @@
 #pragma once
+#include"AllStruct.h"
 #include<string>
 #include<fstream>
 #include<vector>
@@ -7,12 +8,20 @@ using namespace std;
 
 class Scaner
 {
-	vector <string> KW_vector;//Вектор Ключевых слов
-	vector <string> DIVIDER_vector;//Вектор разделителей
 	ifstream in_main;//Указатель на файл с иходным кодом
 
-public:
-	Scaner();
+	All_KeyWords table_of_keyWords;//Все ключевые слова, оператор table_of_keyWords == string obg возвращает true, если в таблице есть такое слово
+	All_Dividers table_of_dividers;//Все разделители, оператор table_of_dividers == string obg возвращает true, если в таблице есть такой разделитель
 
-	bool try_KW(string &A);
+	Table <Token> stream_of_token;//Таблица потока лексем(обращение stream_of_token[i]). Оператор  stream_of_token += Token добавляет в таблицу токен
+	Table <Identifier> table_of_identifier;//Таблица ID(обращение table_of_identifier[i]). Оператор  table_of_identifier += Identifier добавляет в таблицу токен
+	Table <Constant> table_of_constant;//Таблица констант. (обращение table_of_constant[i]). Оператор  table_of_constant += Constant добавляет в таблицу константу
+public:
+	Scaner();//Получение объекта-указателя на файл, открытие файла
+	~Scaner();// Закрытие файла
+
+	string get_lex();//Получение очередной лексемы
+
+	bool try_KeyWord(string &A);//Проверка является ли лексема ключевым словом
+	bool try_Divider(string &A);//Проверка является ли лексема разделителем
 };
