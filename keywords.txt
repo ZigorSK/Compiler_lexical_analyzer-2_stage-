@@ -1,0 +1,7 @@
+main
+char
+int
+string
+proc
+return
+while
