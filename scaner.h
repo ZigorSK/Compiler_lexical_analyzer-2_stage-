@@ -16,11 +16,14 @@ class Scaner
 	Table <Token> stream_of_token;//Таблица потока лексем(обращение stream_of_token[i]). Оператор  stream_of_token += Token добавляет в таблицу токен
 	Table <Identifier> table_of_identifier;//Таблица ID(обращение table_of_identifier[i]). Оператор  table_of_identifier += Identifier добавляет в таблицу токен
 	Table <Constant> table_of_constant;//Таблица констант. (обращение table_of_constant[i]). Оператор  table_of_constant += Constant добавляет в таблицу константу
+
+	char keeper_last_char;//Символ, хранящий последний обработаный символ функции get_lex
 public:
 	Scaner();//Получение объекта-указателя на файл, открытие файла
 	~Scaner();// Закрытие файла
 
 	string get_lex();//Получение очередной лексемы
+	bool delete_coment(char c1, char c2);//Удаление коментариев, если коментарий был удалён возвращает true, иначе false
 
 	bool try_KeyWord(string &A);//Проверка является ли лексема ключевым словом
 	bool try_Divider(string &A);//Проверка является ли лексема разделителем

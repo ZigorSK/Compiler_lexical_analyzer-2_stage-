@@ -73,7 +73,6 @@ All_Dividers::All_Dividers()
 
 bool All_Dividers::operator==(string & obg)
 {
-
 	for (auto var : dividers)
 	{
 		if (obg == var)

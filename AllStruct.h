@@ -59,7 +59,7 @@ class All_Dividers//Все ключевые слова из входного файла
 	vector <string> dividers;
 public:
 	All_Dividers();
-
+	
 	bool operator ==(string &obg);//Есть ли среди всех разделителей слово obg?
 };
 

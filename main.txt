@@ -1,22 +1,24 @@
 //Pseudo code
-main(); {
-char a;
-int i;
-char b;
-string c;
-/*многострочный
-коментарий
-*/
-c = a+b;
-i = length(c);
-print(i);
+main(); 
+{
+	char a;
+	int i;
+	char b;
+	string c;
+	/*coment
+	coment
+	*/
+	c=a+b;
+	i = length(c);
+	print(i);
 
-proc length( string x) {
-	int l = 0;
-	while( l != '\0' )
-		l++;
+	proc length( string x) 
+	{
+		int l = 0;
+		while( l <10 )
+			l++;
 
-return l;
-};
+		return l;
+	};
 
 }
