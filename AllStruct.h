@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-enum {KEYWORD, DIVIDER, IDENTIFIER, CONSTANT, END_OF_PROGRAMM, ERROR};
+enum {KEYWORD, DIVIDER, IDENTIFIER, CONSTANT, END_OF_PROGRAMM, ERROR, BEGIN_STATE};
 
 class Token//1 Лексема
 {
@@ -50,6 +50,7 @@ class All_KeyWords//Все ключевые слова из входного файла
 public:
 	All_KeyWords();
 
+	vector <string> & get_vect_key_word() { return keyWords; };
 	bool operator ==(string &obg);//Есть ли среди всех ключевых слов слово obg?
 
 };
@@ -60,6 +61,7 @@ class All_Dividers//Все ключевые слова из входного файла
 public:
 	All_Dividers();
 	
+	vector <string> & get_dividers() { return dividers; };
 	bool operator ==(string &obg);//Есть ли среди всех разделителей слово obg?
 };
 
@@ -71,8 +73,12 @@ class Table
 public:
 	Table();
 
+	int get_count() { return count; };
+
 	Table <T> &operator +=(T &obg);
-	T operator [](int num);
+	T &operator [](int num);
+	bool operator ==(string &obg);
+
 };
 
 template<typename T>
@@ -91,7 +97,19 @@ inline Table<T>& Table<T>::operator+=(T & obg)
 }
 
 template<typename T>
-inline T Table<T>::operator[](int num)
+inline bool Table<T>::operator==(string & obg)
+{
+	for (auto var : table)
+	{
+		if (obg == var.get_name())
+			return true;
+	}
+
+	return false;
+}
+
+template<typename T>
+inline T &Table<T>::operator[](int num)
 {
 	return table[num];
 }

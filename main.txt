@@ -1,17 +1,17 @@
-//Pseudo code
+//Prjgramma test
 main(); 
 {
-	char a;
+	char abo;
 	int i;
 	char b;
 	string c;
 	/*coment
-	coment
+	coment coment
 	*/
-	c=a+b;
+	c=abo+b;
 	i = length(c);
-	print(i);
-
+	print       (i);
+	//Pseudo code
 	proc length( string x) 
 	{
 		int l = 0;
@@ -20,5 +20,5 @@ main();
 
 		return l;
 	};
-
+	//Pseudo code
 }

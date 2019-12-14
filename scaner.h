@@ -4,6 +4,7 @@
 #include<fstream>
 #include<vector>
 #include<iostream>
+#include<iomanip>
 using namespace std;
 
 class Scaner
@@ -25,6 +26,8 @@ public:
 	string get_lex();//Получение очередной лексемы
 	bool delete_coment(char c1, char c2);//Удаление коментариев, если коментарий был удалён возвращает true, иначе false
 
-	bool try_KeyWord(string &A);//Проверка является ли лексема ключевым словом
-	bool try_Divider(string &A);//Проверка является ли лексема разделителем
+	void to_scan();//Получние потока лексем и таблиц ID and Const
+
+	void print_stream_of_lex();
+	void print_another_table();
 };
