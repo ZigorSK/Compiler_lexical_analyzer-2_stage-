@@ -8,7 +8,7 @@ main();
 	/*coment
 	coment coment
 	*/
-	c=abo+b;
+	c= abo+b;
 	i = length(c);
 	print       (i);
 	//Pseudo code
@@ -16,7 +16,7 @@ main();
 	{
 		int l = 0;
 		while( l <10 )
-			l++;
+			l = l + 1;
 
 		return l;
 	};

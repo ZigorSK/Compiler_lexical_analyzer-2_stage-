@@ -1,0 +1,29 @@
+#include "type.h"
+
+Base_NeTerminal * type::derivation(int * now_lex, Scaner * table)
+{
+	
+	Token lexem = _All_table->get_stream_of_token().get_table()[(*_now_lex)];//Текущий терминал
+
+	//<type> :: = char | int | float | double | string
+	//
+
+		if (((lexem.get_type() == KEYWORD) && (lexem.get_name() == "char"))||
+			((lexem.get_type() == KEYWORD) && (lexem.get_name() == "int")) ||
+			((lexem.get_type() == KEYWORD) && (lexem.get_name() == "float"))||
+			((lexem.get_type() == KEYWORD) && (lexem.get_name() == "double"))||
+			((lexem.get_type() == KEYWORD) && (lexem.get_name() == "string")))//Значит всё ок, создаём класс терминала
+		{
+			Base_NeTerminal * child = new Terminal(_now_lex, _All_table, this, "Terminal");//Выделяем память под новый терминал
+			add(child);//Добавляем ребёнка
+			(*_now_lex)++;
+		}
+		else
+		{
+			cout << "Неизвестный тип" << endl;
+			return nullptr;
+		}
+
+
+	return this;
+}

@@ -10,6 +10,7 @@ Scaner::Scaner()
 	{
 		cout << "Error opening file main.txt" << endl;
 		system("pause");
+		exit(0);
 		system("cls");
 	}
 	
@@ -22,6 +23,7 @@ Scaner::~Scaner()
 
 string Scaner::get_lex() 
 {
+	
 	int state = BEGIN_STATE;
 	string bufer, t_str;
 	char c1, c2;
@@ -36,6 +38,7 @@ string Scaner::get_lex()
 			//flag = false;
 			if (!in_main.eof())
 				c1 = in_main.get();//Получение символа char
+		
 		}
 		else
 		{
@@ -57,6 +60,7 @@ string Scaner::get_lex()
 
 	while ((!in_main.eof()) ||(c1 >0))
 	{
+
 		//Начало коментария, если встречен с1 =/ с2 =/ Или с1 =/ с2 = *
 		if (delete_coment(c1, c2))//Пропуск коментариев
 		{
@@ -98,6 +102,7 @@ string Scaner::get_lex()
 				t_str = "";
 				Token A(t_str, ERROR);
 				stream_of_token += A;
+				exit(0);
 				return t_str;
 			}
 
@@ -110,6 +115,7 @@ string Scaner::get_lex()
 				t_str = "";
 				Token A(t_str, ERROR);
 				stream_of_token += A;
+				exit(0);
 				return t_str;
 			}
 		}
@@ -171,7 +177,7 @@ string Scaner::get_lex()
 	} 
 
 	bufer = "";//При возвращении пустой строки - конечное состояние
-	Token A(bufer, END_OF_PROGRAMM);
+	Token A(bufer, END_OF_programM);
 	stream_of_token += A;
 
 	return bufer;
@@ -217,9 +223,25 @@ bool Scaner::delete_coment(char c1, char c2)
 	return false;
 }
 
-void Scaner::to_scan()
+Scaner & Scaner::to_scan()
 {
-	while (get_lex() != "") {}
+	int i = 0;
+	while (1) 
+	{
+		get_lex();
+		if (stream_of_token.get_table()[i].get_type() != END_OF_programM)
+			break;
+		if (stream_of_token.get_table()[i].get_type() != ERROR)
+		{
+			cout << "ERROR" << endl;
+			system("pause");
+			exit(0);
+		}
+		i++;
+		
+	}
+
+	return *this;
 
 }
 

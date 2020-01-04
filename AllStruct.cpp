@@ -93,3 +93,10 @@ Token::Token(const Token & obg)
 	name = obg.name;
 	type = obg.type;
 }
+
+Token & Token::operator=(Token & obg)
+{
+	name = obg.get_name();
+	type = obg.get_type();
+	return *this;
+}

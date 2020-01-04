@@ -1,0 +1,60 @@
+#include "progBlock.h"
+
+Base_NeTerminal * progBlock::derivation(int * now_lex, Scaner * table)
+{
+	//<progBlock> :: = <varDefine><progBlock> | <operBlock><progBlock> | <func><progBlock> | e
+	//<varDefine>
+	Base_NeTerminal *myVarDefine = new varDefine(_now_lex, _All_table, this, "varDefine");
+
+	if (*myVarDefine->derivation(_now_lex, _All_table) == true)//Если последующее правило свернулось, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+	{
+		add(myVarDefine);//Значит это правило подходит, добавляем его, как ребёнок данного узла
+	}
+	else
+	{
+		delete  myVarDefine;//Если не получилось свернуть правило, то рассматриваем следующее
+
+		//<operBlock>
+		Base_NeTerminal *  myOperBlock = new operBlock(_now_lex, _All_table, this, "operBlock");
+
+		if (*myOperBlock->derivation(_now_lex, _All_table) == true)
+		{
+			add(myOperBlock);
+		}
+		else
+		{
+			delete myOperBlock;//
+			//Если не получилось свернуть правило, то рассматриваем следующее
+			
+			//<func>
+			Base_NeTerminal *  myFunc = new func(_now_lex, _All_table, this, "func");
+
+			if (*myFunc->derivation(_now_lex, _All_table) == true)
+			{
+				add(myFunc);
+			}
+			else
+			{
+				_flag_choice = false;
+				delete  myFunc;//Значит пустой симовл
+				return this;
+			}
+		}
+	}
+
+	//Если Это <varDefine>|<operBlock>|<func>, то создаём <progBlock>
+	//<progBlock>
+
+	Base_NeTerminal *  myProgBlock = new progBlock(_now_lex, _All_table, this, "progBlock");
+
+	if (*myProgBlock->derivation(_now_lex, _All_table) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+	{
+		add(myProgBlock);
+	}
+	else
+	{
+		delete myProgBlock;//Значит сварачивается в пустой символ
+	}
+
+	return this;
+}

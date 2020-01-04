@@ -5,13 +5,15 @@
 #include <iostream>
 using namespace std;
 
-enum {KEYWORD, DIVIDER, IDENTIFIER, CONSTANT, END_OF_PROGRAMM, ERROR, BEGIN_STATE};
+enum {KEYWORD, DIVIDER, IDENTIFIER, CONSTANT, END_OF_programM, ERROR, BEGIN_STATE};
 
 class Token//1 Лексема
 {
 	string name;
 	int type;//1-ID; 2- KEYWORD; 3 -DIVIDER; 4-CONSTANT.
+
 public:
+	Token() :name(""), type(ERROR) {};
 	Token(string &NAME, int TYPE);
 	Token(const Token &obg);
 
@@ -20,6 +22,8 @@ public:
 
 	void set_type(int N) { type = N; };
 	int get_type() { return type; };
+
+	Token &operator=(Token &obg);
 };
 
 class Identifier
@@ -74,7 +78,10 @@ public:
 	Table();
 
 	int get_count() { return count; };
+	vector <T> &get_table() { return table; };
 
+
+	Table<T> &operator=(Table<T> obg);
 	Table <T> &operator +=(T &obg);
 	T &operator [](int num);
 	bool operator ==(string &obg);
@@ -85,6 +92,19 @@ template<typename T>
 inline Table<T>::Table()
 {
 	count = 0;
+}
+
+template<typename T>
+inline Table<T>& Table<T>::operator=(Table<T> obg)
+{
+	int j = 0;
+	for (auto i  : obg.get_table())
+	{
+		table[j] = i;
+		j++;
+	}
+	count = obg.get_count();
+	return *this;
 }
 
 template<typename T>
