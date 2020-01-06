@@ -32,7 +32,7 @@ Base_NeTerminal * program::derivation(int * now_lex, Scaner * table)
 		Error obg( err, this );
 	}
 
-	lexem = _All_table->get_stream_of_token().get_table()[(*_now_lex)];
+	lexem = _All_table->get_stream_of_token().get_table()[*_now_lex];
 	//<program> ::= main();{<progBlock>}^
 	//(
 	try
@@ -169,6 +169,8 @@ Base_NeTerminal * program::derivation(int * now_lex, Scaner * table)
 	{
 		cout << "ќжидаетс€ конец программы" << endl;
 		Error(lexem, this);
+		
 	}
+	return this;
 }
 

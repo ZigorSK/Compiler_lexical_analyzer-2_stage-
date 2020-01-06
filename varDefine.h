@@ -2,16 +2,12 @@
 
 #include"Parser.h"
 
-class Base_NeTerminal;
-class progBlock;
-class Scaner;
-
 class varDefine : public Base_NeTerminal
 {
 	varDefine() = delete;
 
 public:
-	varDefine(int *now_lex, Scaner * All_table, Base_NeTerminal *parent, string name) : Base_NeTerminal{ now_lex, All_table, parent, "Terminal" }{	};
+	varDefine(int *now_lex, Scaner * All_table, Base_NeTerminal *parent, string name) : Base_NeTerminal{ now_lex, All_table, parent, "varDefine" }{	};
 
 	Base_NeTerminal *derivation(int *now_lex, Scaner *table) override;
 };

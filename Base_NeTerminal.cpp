@@ -1,6 +1,5 @@
 #include "Base_NeTerminal.h"
 
-
 Base_NeTerminal::~Base_NeTerminal()
 {
 	for (auto child : _childs)

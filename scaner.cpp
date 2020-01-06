@@ -38,7 +38,6 @@ string Scaner::get_lex()
 			//flag = false;
 			if (!in_main.eof())
 				c1 = in_main.get();//Получение символа char
-		
 		}
 		else
 		{
@@ -57,6 +56,57 @@ string Scaner::get_lex()
 	
 	if ((c1 >= '0') && (c1 <= '9'))
 		state = CONSTANT;
+
+	if (c1 == '\'')//Символьная константа
+	{
+		//keeper_last_char = c2;
+
+		bufer = c1;
+		//Добавим Разделитель '
+		Token B(bufer, DIVIDER);
+		stream_of_token += B;
+
+		//Добавляем значение символьой константы
+		state = CONSTANT;
+		bufer = c2;
+
+		Token C(bufer, CONSTANT);
+		stream_of_token += C;
+
+		if (!(table_of_constant == bufer))
+		{
+			Constant D(bufer);
+			string s = "char";
+			D.set_const_type(s);
+			table_of_constant += D;
+		}
+		c1 = c2;
+		if (!in_main.eof())
+			c2 = in_main.get();//Получение символа char
+
+		if (c2 == '\'')//Символьная константа
+		{
+			bufer = c2;
+			//Добавим Разделитель '
+			Token M(bufer, DIVIDER);
+			stream_of_token += M;
+		}
+		else//Ошибка
+		{
+			//error
+			t_str = "";
+			Token A(t_str, ERROR);
+			stream_of_token += A;
+			exit(0);
+			return t_str;
+		}
+
+		if (!in_main.eof())
+			c2 = in_main.get();//Получение символа char
+		keeper_last_char = c2;
+		bufer = c1;
+		return bufer;
+	}
 
 	while ((!in_main.eof()) ||(c1 >0))
 	{
@@ -225,22 +275,7 @@ bool Scaner::delete_coment(char c1, char c2)
 
 Scaner & Scaner::to_scan()
 {
-	int i = 0;
-	while (1) 
-	{
-		get_lex();
-		if (stream_of_token.get_table()[i].get_type() != END_OF_programM)
-			break;
-		if (stream_of_token.get_table()[i].get_type() != ERROR)
-		{
-			cout << "ERROR" << endl;
-			system("pause");
-			exit(0);
-		}
-		i++;
-		
-	}
-
+	while (get_lex() != "") {}
 	return *this;
 
 }

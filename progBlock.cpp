@@ -2,7 +2,7 @@
 
 Base_NeTerminal * progBlock::derivation(int * now_lex, Scaner * table)
 {
-	//<progBlock> :: = <varDefine><progBlock> | <operBlock><progBlock> | <func><progBlock> | e
+	//<progBlock> :: = <varDefine><progBlock> | <operBlock><progBlock>| e
 	//<varDefine>
 	Base_NeTerminal *myVarDefine = new varDefine(_now_lex, _All_table, this, "varDefine");
 
@@ -23,26 +23,13 @@ Base_NeTerminal * progBlock::derivation(int * now_lex, Scaner * table)
 		}
 		else
 		{
-			delete myOperBlock;//
-			//Если не получилось свернуть правило, то рассматриваем следующее
-			
-			//<func>
-			Base_NeTerminal *  myFunc = new func(_now_lex, _All_table, this, "func");
-
-			if (*myFunc->derivation(_now_lex, _All_table) == true)
-			{
-				add(myFunc);
-			}
-			else
-			{
-				_flag_choice = false;
-				delete  myFunc;//Значит пустой симовл
-				return this;
-			}
+			_flag_choice = false;
+			delete myOperBlock;//Значит пустой симовл
+			return this;
 		}
 	}
 
-	//Если Это <varDefine>|<operBlock>|<func>, то создаём <progBlock>
+	//Если Это <varDefine>|<operBlock>, то создаём <progBlock>
 	//<progBlock>
 
 	Base_NeTerminal *  myProgBlock = new progBlock(_now_lex, _All_table, this, "progBlock");

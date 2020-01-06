@@ -2,7 +2,12 @@
 #include<string>
 #include<vector>
 #include"scaner.h"
+#include<stack>
 using namespace std;
+
+class Scaner;
+
+
 
 class Base_NeTerminal
 {
@@ -18,9 +23,10 @@ protected:
 	Scaner * _All_table;//Указатель на все таблицы
 
 	bool _flag_choice;//Флаг выбора правило, true, если правило подходит
+
 public:
 
-	Base_NeTerminal(int *now_lex, Scaner * All_table, Base_NeTerminal *parent, string name) :_now_lex(now_lex), _All_table(All_table), _parent(parent), _name(name), _num_node(0), _flag_choice(false) {};
+	Base_NeTerminal(int *now_lex, Scaner * All_table, Base_NeTerminal *parent, string name) :_now_lex(now_lex), _All_table(All_table), _parent(parent), _name(name), _num_node(0), _flag_choice(true) {};
 	virtual ~Base_NeTerminal();
 
 	virtual Base_NeTerminal *getSyntaxTree();//Возвращает указатель на корень
@@ -31,6 +37,14 @@ public:
 	void set_parent(Base_NeTerminal *d) { _parent = d; };
 
 	bool operator==( bool op);
-
 	Base_NeTerminal *get_parent() { return _parent; };
+
+	void PrintTree(ostream &stream)
+	{
+		for (auto &ch : _childs)
+		{
+			stream << "\t\"" << "nodeId = " << _num_node << " | " << _name << "\"->\"" << "nodeId = " << ch->_num_node << " | " << ch->_name << "\";" << endl;
+			ch->PrintTree(stream);
+		}
+	};
 }; 

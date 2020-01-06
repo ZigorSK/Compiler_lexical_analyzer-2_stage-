@@ -4,6 +4,7 @@ All_KeyWords::All_KeyWords()
 {
 	//Чтение ключевых слов 
 	string str;
+	
 	try
 	{
 		ifstream in_KW;

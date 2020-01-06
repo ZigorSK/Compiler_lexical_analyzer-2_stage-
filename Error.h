@@ -11,10 +11,13 @@ class Error
 public:
 	Error(Token &err, Base_NeTerminal * node)
 	{
-		while (node = node->get_parent())
-		{ }
-		delete node;//Очищаем дерево
-		cout << "Встречена лексема, нарушающая синтаксис: " << err.get_name() << ", тип: " << err.get_type() << endl;
+		Base_NeTerminal *ptr = node;
+		while (ptr = node)//Очищаем дерево и все созданые узлы
+		{
+			node = node->get_parent();
+			delete ptr;
+		}
+		cout << "Встречена лексема, нарушающая граматику " << err.get_name() << ", тип: " << err.get_type() << endl;
 		cout << "Выполнение компиляции прекращается." << endl;
 		system("pause");
 		exit(0);

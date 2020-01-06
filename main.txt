@@ -1,24 +1,16 @@
-//Prjgramma test
 main(); 
 {
-	char abo;
+	char a = 'H';
 	int i;
-	char b;
+	char b = 'i';
 	string c;
-	/*coment
-	coment coment
-	*/
-	c= abo+b;
-	i = length(c);
-	print       (i);
-	//Pseudo code
-	proc length( string x) 
-	{
-		int l = 0;
-		while( l <10 )
-			l = l + 1;
 
-		return l;
-	};
-	//Pseudo code
+	c = a + b;
+	i = length(c);
+	print(c);//Вывод строки
+	print(i);//Вывод длинны строки
+
+	i = (i+10) + i*2;//Выислеие преобразованной длинны строки
+	print(i);//Вывод преобразованной длинны строки
+
 }

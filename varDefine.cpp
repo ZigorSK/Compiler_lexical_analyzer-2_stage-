@@ -1,7 +1,9 @@
 #include "varDefine.h"
 
+
 Base_NeTerminal * varDefine::derivation(int * now_lex, Scaner * table)
 {
+
 	//<varDefine> ::= <type><idSeq>;
 	//<type>
 	Base_NeTerminal *myType = new type(_now_lex, _All_table, this, "type");
@@ -22,15 +24,16 @@ Base_NeTerminal * varDefine::derivation(int * now_lex, Scaner * table)
 
 	Base_NeTerminal *myidSeq = new idSeq(_now_lex, _All_table, this, "idSeq");
 	if (*myidSeq->derivation(_now_lex, _All_table) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+	{
 		add(myidSeq);
+	}
 	else
 	{
 		delete myidSeq;//
 		cout << "Ожидается идентификатор" << endl;
 		Error(_All_table->get_stream_of_token().get_table()[*(_now_lex)], this);
-		_flag_choice = false;
-		return this;
 	}
+
 
 	//<varDefine> ::= <type><idSeq>;
 	//;

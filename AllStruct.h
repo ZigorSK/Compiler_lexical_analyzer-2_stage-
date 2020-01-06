@@ -29,23 +29,39 @@ public:
 class Identifier
 {
 	string name;
+	string id_type;//Тип Идентификатора
+	string value;
+	bool dec;// false - Не обьявлена, true обявлена
 public:
-	Identifier(string &NAME) { name = NAME; };
+	Identifier(string &NAME) { name = NAME; id_type = "int"; dec = false;/*Не объявлен*/ value = "";/*Если пустая строка, то не инициализирована*/ };
 	Identifier(const Identifier &obg) { name = obg.name; };
 
 	void set_name(string &N) { name = N; };
 	string &get_name() { return name; };
+
+	void set_id_type(string &N) { id_type = N; };
+	string &get_id_type() { return id_type; };
+
+	void set_dec(bool N) { dec = N; };
+	bool get_dec() { return dec; };
+
+	void set_value(string &N) { value = N; };
+	string &get_value() { return value; };
 };
 
 class Constant
 {
 	string name;
+	string const_type;//Тип константы - int, char(Если символ в '')
 public:
-	Constant(string &NAME) { name = NAME; };
+	Constant(string &NAME) { name = NAME; const_type ="int" ;};
 	Constant(const Constant &obg) { name = obg.name; };
 
 	void set_name(string &N) { name = N; };
 	string &get_name() { return name; };
+
+	void set_const_type(string &N) { const_type = N; };
+	string &get_const_type() { return const_type; };
 };
 
 class All_KeyWords//Все ключевые слова из входного файла
@@ -86,6 +102,22 @@ public:
 	T &operator [](int num);
 	bool operator ==(string &obg);
 
+	T * finde(string & obg)//Ищет в таблице элемент с именем obg(ДЛя констант и ID)
+	{
+		for (auto i : table)
+		{
+			if (i.get_name() == obg)
+				return &i;
+		}
+	};
+	int finde_num(string & obg)//Ищет в таблице элемент с именем obg(ДЛя констант и ID)
+	{
+		for (auto i : table)
+		{
+			if (i.get_name() == obg)
+				return count;
+		}
+	};
 };
 
 template<typename T>
