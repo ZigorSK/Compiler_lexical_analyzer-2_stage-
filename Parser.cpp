@@ -20,7 +20,7 @@ Base_NeTerminal * Parser::finde_syntaxTree()
 {
 	_root = new program(_now_lex, _All_table, nullptr, "program");
 	_All_table->print_stream_of_lex();
-	system("pause");
+
 	_root->derivation( _now_lex, _All_table );//Строим дерево
 	
 	ofstream parse("parse_tree.dot");
@@ -31,8 +31,8 @@ Base_NeTerminal * Parser::finde_syntaxTree()
 	_root->PrintTree(parse);
 	parse << "}" << endl;
 	parse.close();
-	//system("graphviz-2.38\\bin\\dot -Tpng parse_tree.dot -o parse_tree.png");
-	
+	system("graphviz-2.38\\bin\\dot -Tpng parse_tree.dot -o parse_tree.png");
+	system("pause");
 	return _root;
 	//return nullptr;
 }
