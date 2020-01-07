@@ -10,5 +10,5 @@ class Terminal: public Base_NeTerminal
 public:
 	Terminal(int *now_lex, Scaner * All_table, Base_NeTerminal *parent, string name) : Base_NeTerminal{ now_lex, All_table, parent, name }{ };
 
-	Base_NeTerminal *derivation(int *now_lex, Scaner *table) override;
+	Base_NeTerminal *derivation(int *now_lex, Scaner *table, MyCheckVector *_MyCheck) override;
 };

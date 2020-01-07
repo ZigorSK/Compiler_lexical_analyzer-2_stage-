@@ -17,5 +17,5 @@ public:
 	explicit program(int *now_lex, Scaner * All_table, Base_NeTerminal *parent, string name) : Base_NeTerminal{ now_lex, All_table, parent, "program" }{};
 
 	Base_NeTerminal *getSyntaxTree();//Возвращает указатель на корень
-	virtual Base_NeTerminal *derivation(int *now_lex, Scaner *table) override;
+	virtual Base_NeTerminal *derivation(int *now_lex, Scaner *table, MyCheckVector *_MyCheck) override;
 };

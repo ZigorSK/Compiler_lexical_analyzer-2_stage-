@@ -34,7 +34,7 @@ class Identifier
 	bool dec;// false - Не обьявлена, true обявлена
 public:
 	Identifier(string &NAME) { name = NAME; id_type = "int"; dec = false;/*Не объявлен*/ value = "";/*Если пустая строка, то не инициализирована*/ };
-	Identifier(const Identifier &obg) { name = obg.name; };
+	Identifier(const Identifier &obg) { name = obg.name; id_type = obg.id_type; dec = obg.dec;/*Не объявлен*/ value = obg.value; };
 
 	void set_name(string &N) { name = N; };
 	string &get_name() { return name; };
@@ -55,7 +55,7 @@ class Constant
 	string const_type;//Тип константы - int, char(Если символ в '')
 public:
 	Constant(string &NAME) { name = NAME; const_type ="int" ;};
-	Constant(const Constant &obg) { name = obg.name; };
+	Constant(const Constant &obg) {name = obg.name; const_type = const_type = obg.const_type;};
 
 	void set_name(string &N) { name = N; };
 	string &get_name() { return name; };
@@ -112,10 +112,12 @@ public:
 	};
 	int finde_num(string & obg)//Ищет в таблице элемент с именем obg(ДЛя констант и ID)
 	{
+		int Mycount = 0;
 		for (auto i : table)
 		{
 			if (i.get_name() == obg)
-				return count;
+				return Mycount;
+			Mycount++;
 		}
 	};
 };

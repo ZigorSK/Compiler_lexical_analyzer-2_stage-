@@ -1,13 +1,13 @@
 #include "idSeq.h"
 
-Base_NeTerminal * idSeq::derivation(int * now_lex, Scaner * table)
+Base_NeTerminal * idSeq::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check)
 {
 
 	//< idSeq > :: = <id> 
 
 	Base_NeTerminal *myid = new id(_now_lex, _All_table, this, "id");
 
-	if (*myid->derivation(_now_lex, _All_table) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+	if (*myid->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 	{
 		add(myid);
 	}
@@ -29,7 +29,7 @@ Base_NeTerminal * idSeq::derivation(int * now_lex, Scaner * table)
 
 		Base_NeTerminal *  myConst = new Const(_now_lex, _All_table, this, "Const");
 
-		if (*myConst->derivation(_now_lex, _All_table) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+		if (*myConst->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 		{
 			add(myConst);
 		}
@@ -53,7 +53,7 @@ Base_NeTerminal * idSeq::derivation(int * now_lex, Scaner * table)
 
 		//<idSeq>
 		Base_NeTerminal *  myidSeq = new idSeq(_now_lex, _All_table, this, "idSeq");
-		if (*myidSeq->derivation(_now_lex, _All_table) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+		if (*myidSeq->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 		{
 			add(myidSeq);
 		}

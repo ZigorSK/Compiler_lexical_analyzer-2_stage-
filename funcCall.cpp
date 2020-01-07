@@ -1,6 +1,6 @@
 #include "funcCall.h"
 
-Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table)
+Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check)
 {
 	//<funcCall> ::= <id>(<idSeq>)
 	Token lexem = _All_table->get_stream_of_token().get_table()[*_now_lex + 1];//Текущий терминал
@@ -11,7 +11,7 @@ Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table)
 		//id
 		Base_NeTerminal *myid = new id(_now_lex, _All_table, this, "id");
 
-		if (*myid->derivation(_now_lex, _All_table) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+		if (*myid->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 		{
 			add(myid);
 		}
@@ -30,6 +30,7 @@ Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table)
 			{
 				Base_NeTerminal *child = new Terminal(_now_lex, _All_table, this, "(");//Выделяем память под лист терминала
 				add(child);//Добавляем ребёнка
+				_My_check->push_back(child);//Добавляем терминал = 
 				(*_now_lex)++;
 			}
 			else
@@ -45,7 +46,7 @@ Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table)
 
 		//idSeq
 		Base_NeTerminal *myidSeq = new idSeq(_now_lex, _All_table, this, "idSeq");
-		if (*myidSeq->derivation(_now_lex, _All_table) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+		if (*myidSeq->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 		{
 			add(myidSeq);
 		}
@@ -79,6 +80,75 @@ Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table)
 			Error obg(err, this);
 		}
 
+		vector <Base_NeTerminal *>Myvector;
+		//Семантический блок проверка соответсвия типов.
+		while (_My_check->get_MyCheck().back()->get_name() != "(")
+		{
+			Myvector.push_back(_My_check->get_MyCheck().back());
+			_My_check->get_MyCheck().pop_back();//Удаляем последний элемент
+		}
+		_My_check->get_MyCheck().pop_back();//Удаляем последний элемент
+
+		//таким образом в Myvector имеем список аргументов а последний элемент _My_check - имя функции
+
+		int num = _My_check->get_MyCheck().back()->get_num_inTdTable();
+		Identifier & itId = _All_table->get_table_of_identifier()[num];
+
+		//проверка обявлены ли аргументы функций?
+		for (auto i : Myvector)
+		{
+			int num1 = i->get_num_inTdTable();
+			Identifier & itId1 = _All_table->get_table_of_identifier()[num1];
+			if (itId1.get_dec() == false)
+			{
+				cout << "Идентификатор " << itId1.get_name()<<" не обявлен!!!" << endl;
+				system("pause");
+				exit(0);
+			}
+
+		}
+		//
+
+		if (_My_check->get_MyCheck().back()->get_childs().back()->get_name() == "print")
+		{
+			if (Myvector.size() < 1)
+			{
+				cout << "У функции print не может быть меньше 1 параметра!!!" << endl;
+				system("pause");
+				exit(0);
+			}
+			//all ok)
+			string s = "void";
+			itId.set_dec(true);//Теперь идентификатор объявлен
+			itId.set_id_type(s);//Устанавливаем тип id
+		}
+		else
+		{
+			if (_My_check->get_MyCheck().back()->get_childs().back()->get_name() == "length")
+			{
+				
+				if ((Myvector.size() == 1) &&(_All_table->get_table_of_identifier()[Myvector.back()->get_num_inTdTable()].get_id_type() == "string"))
+				{
+					//all ok)
+					string s = "int";
+					itId.set_dec(true);//Теперь идентификатор объявлен
+					itId.set_id_type(s);//Устанавливаем тип id
+				}
+				else
+				{
+					cout << "У функции lenght Должен быть 1 аргумент типа string!!!" << endl;
+					system("pause");
+					exit(0);
+				}
+			}
+			else
+			{
+				cout << "Язык не поддерживает данную функцию!!!" << endl;
+				system("pause");
+				exit(0);
+			}
+		}
+		//
 		return this;
 	}
 	else

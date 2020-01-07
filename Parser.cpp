@@ -7,6 +7,7 @@ Parser::Parser()
 	_now_lex = new int;
 	*_now_lex = 0;//Рассматриваем с первой лексемы
 	_root = nullptr;
+	_MyCheck = new MyCheckVector();
 }
 
 Parser::~Parser()
@@ -14,14 +15,18 @@ Parser::~Parser()
 	delete _All_table;
 	delete _now_lex;
 	delete _root;
+	delete _MyCheck;
 }
 
 Base_NeTerminal * Parser::finde_syntaxTree()
 {
+	//Стэк для семантики
+	auto typeStack = new stack<string>;
+	//Вектор для построения обратной польской записи
 	_root = new program(_now_lex, _All_table, nullptr, "program");
-	_All_table->print_stream_of_lex();
+	//_All_table->print_stream_of_lex();
 
-	_root->derivation( _now_lex, _All_table );//Строим дерево
+	_root->derivation( _now_lex, _All_table, _MyCheck);//Строим дерево
 	
 	ofstream parse("parse_tree.dot");
 	if (!parse)
@@ -32,7 +37,9 @@ Base_NeTerminal * Parser::finde_syntaxTree()
 	parse << "}" << endl;
 	parse.close();
 	system("graphviz-2.38\\bin\\dot -Tpng parse_tree.dot -o parse_tree.png");
-	system("pause");
+	
+
+	delete typeStack;
 	return _root;
 	//return nullptr;
 }
