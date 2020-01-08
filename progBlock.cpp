@@ -1,12 +1,12 @@
 #include "progBlock.h"
 
-Base_NeTerminal * progBlock::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check)
+Base_NeTerminal * progBlock::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check, VectorOfOP * _MyVectorOp)
 {
 	//<progBlock> :: = <varDefine><progBlock> | <operBlock><progBlock>| e
 	//<varDefine>
 	Base_NeTerminal *myVarDefine = new varDefine(_now_lex, _All_table, this, "varDefine");
 
-	if (*myVarDefine->derivation(_now_lex, _All_table, _My_check) == true)//Если последующее правило свернулось, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+	if (*myVarDefine->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если последующее правило свернулось, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 	{
 		add(myVarDefine);//Значит это правило подходит, добавляем его, как ребёнок данного узла
 	}
@@ -17,7 +17,7 @@ Base_NeTerminal * progBlock::derivation(int * now_lex, Scaner * table, MyCheckVe
 		//<operBlock>
 		Base_NeTerminal *  myOperBlock = new operBlock(_now_lex, _All_table, this, "operBlock");
 
-		if (*myOperBlock->derivation(_now_lex, _All_table, _My_check) == true)
+		if (*myOperBlock->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)
 		{
 			add(myOperBlock);
 		}
@@ -34,7 +34,7 @@ Base_NeTerminal * progBlock::derivation(int * now_lex, Scaner * table, MyCheckVe
 
 	Base_NeTerminal *  myProgBlock = new progBlock(_now_lex, _All_table, this, "progBlock");
 
-	if (*myProgBlock->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+	if (*myProgBlock->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 	{
 		add(myProgBlock);
 	}

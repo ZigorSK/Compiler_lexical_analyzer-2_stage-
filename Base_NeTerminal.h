@@ -3,6 +3,7 @@
 #include<vector>
 #include"scaner.h"
 #include"MyCheckVector.h"
+#include"VectorOfOP.h"
 using namespace std;
 
 class MyCheckVector;
@@ -30,9 +31,9 @@ public:
 	virtual ~Base_NeTerminal();
 
 	virtual Base_NeTerminal *getSyntaxTree();//Возвращает указатель на корень
-	virtual Base_NeTerminal *derivation(int *now_lex, Scaner *table, MyCheckVector *_MyCheck);
+	virtual Base_NeTerminal *derivation(int *now_lex, Scaner *table, MyCheckVector *_MyCheck, VectorOfOP * _MyVectorOp);
 	virtual void add(Base_NeTerminal * child);
-
+	
 
 	string &get_name() { return _name; };
 	void set_num_node(int num_node) { _num_node = num_node; };

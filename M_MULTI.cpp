@@ -1,6 +1,6 @@
 ﻿#include "M_MULTI.h"
 
-Base_NeTerminal * MULTI::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check)
+Base_NeTerminal * MULTI::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check, VectorOfOP * _MyVectorOp)
 {
 	Token lexem = _All_table->get_stream_of_token().get_table()[(*_now_lex)];//Текущий терминал
 
@@ -10,7 +10,8 @@ Base_NeTerminal * MULTI::derivation(int * now_lex, Scaner * table, MyCheckVector
 		//*
 		Base_NeTerminal *child = new Terminal(_now_lex, _All_table, this, "*");//Выделяем память под лист терминала
 		add(child);//Добавляем ребёнка
-		_My_check->push_back(child);//Добавляем терминал = 
+		_My_check->push_back(child);//Добавляем терминал *
+		_MyVectorOp->push_back(child);
 		(*_now_lex)++;
 		
 	}
@@ -21,7 +22,8 @@ Base_NeTerminal * MULTI::derivation(int * now_lex, Scaner * table, MyCheckVector
 			// /
 			Base_NeTerminal *child = new Terminal(_now_lex, _All_table, this, "/");//Выделяем память под лист терминала
 			add(child);//Добавляем ребёнка
-			_My_check->push_back(child);//Добавляем терминал = 
+			_My_check->push_back(child);//Добавляем терминал /
+			_MyVectorOp->push_back(child);
 			(*_now_lex)++;
 		}
 		else//ε
@@ -34,7 +36,7 @@ Base_NeTerminal * MULTI::derivation(int * now_lex, Scaner * table, MyCheckVector
 	//<primary>
 	Base_NeTerminal *myprimary = new primary(_now_lex, _All_table, this, "primary");
 
-	if (*myprimary->derivation(_now_lex, _All_table, _My_check) == true)//Если последующее правило свернулось, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+	if (*myprimary->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если последующее правило свернулось, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 	{
 		add(myprimary);//Значит это правило подходит, добавляем его, как ребёнок данного узла
 	}
@@ -47,7 +49,7 @@ Base_NeTerminal * MULTI::derivation(int * now_lex, Scaner * table, MyCheckVector
 	//<MULTI>
 	Base_NeTerminal *myMULTI = new MULTI(_now_lex, _All_table, this, "MULTI");
 
-	if (*myMULTI->derivation(_now_lex, _All_table, _My_check) == true)//Если последующее правило свернулось, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+	if (*myMULTI->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если последующее правило свернулось, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 	{
 		add(myMULTI);//Значит это правило подходит, добавляем его, как ребёнок данного узла
 	}

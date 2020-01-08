@@ -1,17 +1,18 @@
 #include "varDefine.h"
 
 
-Base_NeTerminal * varDefine::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check)
+Base_NeTerminal * varDefine::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check, VectorOfOP * _MyVectorOp)
 {
 	//Очищаем _My_check
 	_My_check->get_MyCheck().clear();
+	_MyVectorOp->get_VectorOfOP().clear();
 	//
 
 	//<varDefine> ::= <type><idSeq>;
 	//<type>
 	Base_NeTerminal *myType = new type(_now_lex, _All_table, this, "type");
 
-	if (*myType->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+	if (*myType->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 	{
 		add(myType);
 	}
@@ -26,7 +27,7 @@ Base_NeTerminal * varDefine::derivation(int * now_lex, Scaner * table, MyCheckVe
 	//<idSeq>
 
 	Base_NeTerminal *myidSeq = new idSeq(_now_lex, _All_table, this, "idSeq");
-	if (*myidSeq->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+	if (*myidSeq->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 	{
 		add(myidSeq);
 	}
@@ -88,7 +89,46 @@ Base_NeTerminal * varDefine::derivation(int * now_lex, Scaner * table, MyCheckVe
 	}
 	_My_check->get_MyCheck().clear();//Очищаем вектор
 	//
+	//блок выполнения
+	//OPZ не требуется вектор id = const id id id = const, например
+	Base_NeTerminal *op_left, *op_right;
+	op_left = _MyVectorOp->get_VectorOfOP()[0];
+	int size = _MyVectorOp->get_VectorOfOP().size();
+	for (int i = 1; i < size; i++)
+	{
+		op_right = _MyVectorOp->get_VectorOfOP()[i];
+		if (op_right->get_name() == "=")
+		{
+			//Значит изначальная инициализация
+			i++;
+			op_right = _MyVectorOp->get_VectorOfOP()[i];
+			string tp = _All_table->get_table_of_constant().get_table()[op_right->get_num_inTdTable()].get_const_type();
+			//left = right;
+			string value;
+			if (tp == "char")
+			{
+				value = op_right->get_childs()[1]->get_name();
+			}
+			else
+			{
+				value = op_right->get_childs()[0]->get_name();
+			}
+			_All_table->get_table_of_identifier().get_table()[op_left->get_num_inTdTable()].set_value(value);//Устанавливаем значение
 
+			i++;
+			if (i == size)
+				break;
+			op_left = _MyVectorOp->get_VectorOfOP()[i];
+
+		}
+		else
+		{
+			op_left = op_right;
+		}
+	}
+
+	_MyVectorOp->get_VectorOfOP().clear();
+	//
 	return this;
 }
 

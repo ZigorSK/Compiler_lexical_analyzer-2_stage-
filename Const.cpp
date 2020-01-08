@@ -1,6 +1,6 @@
 #include "Const.h"
 
-Base_NeTerminal * Const::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check)
+Base_NeTerminal * Const::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check, VectorOfOP * _MyVectorOp)
 {
 	Token lexem = _All_table->get_stream_of_token().get_table()[(*_now_lex)];//Текущий терминал
 
@@ -66,6 +66,8 @@ Base_NeTerminal * Const::derivation(int * now_lex, Scaner * table, MyCheckVector
 	}
 	if( _My_check->get_MyCheck().front()->get_name() != "type")
 		_My_check->push_back(this);//Добавляем указатель на константу в Вектор
+
+	_MyVectorOp->push_back(this);//Добавляем константу для генерации
 	return this;
 }
 

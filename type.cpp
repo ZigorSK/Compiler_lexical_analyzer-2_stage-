@@ -1,6 +1,6 @@
 #include "type.h"
 
-Base_NeTerminal * type::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check)
+Base_NeTerminal * type::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check, VectorOfOP * _MyVectorOp)
 {
 	
 	Token lexem = _All_table->get_stream_of_token().get_table()[(*_now_lex)];//Текущий терминал

@@ -12,7 +12,7 @@ Base_NeTerminal * Base_NeTerminal::getSyntaxTree()
 	return nullptr;
 }
 
-Base_NeTerminal * Base_NeTerminal::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check)
+Base_NeTerminal * Base_NeTerminal::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check, VectorOfOP * _MyVectorOp)
 {
 	return this;
 }

@@ -1,6 +1,6 @@
 #include "primary.h"
 
-Base_NeTerminal * primary::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check)
+Base_NeTerminal * primary::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check, VectorOfOP * _MyVectorOp)
 {
 	Token lexem = _All_table->get_stream_of_token().get_table()[(*_now_lex)];//Текущий терминал
 
@@ -13,12 +13,13 @@ Base_NeTerminal * primary::derivation(int * now_lex, Scaner * table, MyCheckVect
 		//(
 		Base_NeTerminal *child = new Terminal(_now_lex, _All_table, this, "(");//Выделяем память под лист терминала
 		add(child);//Добавляем ребёнка
+		_MyVectorOp->push_back(child);
 		(*_now_lex)++;
 		
 		//<Add>
 		Base_NeTerminal *myadd = new Add(_now_lex, _All_table, this, "Add");
 
-		if (*myadd->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+		if (*myadd->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 		{
 			add(myadd);
 		}
@@ -36,6 +37,7 @@ Base_NeTerminal * primary::derivation(int * now_lex, Scaner * table, MyCheckVect
 			{
 				Base_NeTerminal *child = new Terminal(_now_lex, _All_table, this, ")");//Выделяем память под лист терминала
 				add(child);//Добавляем ребёнка
+				_MyVectorOp->push_back(child);
 				(*_now_lex)++;
 			}
 			else
@@ -56,7 +58,7 @@ Base_NeTerminal * primary::derivation(int * now_lex, Scaner * table, MyCheckVect
 
 		Base_NeTerminal *  myFuncCall = new funcCall(_now_lex, _All_table, this, "funcCall");
 
-		if (*myFuncCall->derivation(_now_lex, _All_table, _My_check) == true)
+		if (*myFuncCall->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)
 		{
 			add(myFuncCall);
 		}
@@ -66,7 +68,7 @@ Base_NeTerminal * primary::derivation(int * now_lex, Scaner * table, MyCheckVect
 
 			Base_NeTerminal *myConst = new Const(_now_lex, _All_table, this, "Const");
 
-			if (*myConst->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+			if (*myConst->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 			{
 				add(myConst);
 			}
@@ -76,7 +78,7 @@ Base_NeTerminal * primary::derivation(int * now_lex, Scaner * table, MyCheckVect
 				//id
 				Base_NeTerminal *myid = new id(_now_lex, _All_table, this, "id");
 
-				if (*myid->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+				if (*myid->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 				{
 					add(myid);
 				}

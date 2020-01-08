@@ -5,7 +5,7 @@ Base_NeTerminal * program::getSyntaxTree()
 	return nullptr;
 }
 
-Base_NeTerminal * program::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check)
+Base_NeTerminal * program::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check, VectorOfOP * _MyVectorOp)
 {
 	Token lexem = _All_table->get_stream_of_token().get_table()[(*_now_lex)];//Текущий терминал
 	//<program> ::= main();{<progBlock>}^
@@ -122,7 +122,7 @@ Base_NeTerminal * program::derivation(int * now_lex, Scaner * table, MyCheckVect
 	//<progBlock>
 
 	Base_NeTerminal *  prBlock = new progBlock(_now_lex, _All_table, this, "progBlock");
-	if (*prBlock->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила свернулись, то всё ок)
+	if (*prBlock->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если все последующие правила свернулись, то всё ок)
 		//вызов рекурсивно полиморфного метода. Определяем по крайнему левому терминалу
 	{
 		add(prBlock);

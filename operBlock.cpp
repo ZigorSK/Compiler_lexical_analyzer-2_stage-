@@ -1,12 +1,12 @@
 ﻿#include "operBlock.h"
 
-Base_NeTerminal * operBlock::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check)
+Base_NeTerminal * operBlock::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check, VectorOfOP * _MyVectorOp)
 {
 	//<operBlock> ::= <expr><operBlock>; | <funcCall><operBlock>; | ε
 	//<expr>
 	Base_NeTerminal *myExpr = new expr(_now_lex, _All_table, this, "expr");
 
-	if (*myExpr->derivation(_now_lex, _All_table, _My_check) == true)//Если последующее правило свернулось, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+	if (*myExpr->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если последующее правило свернулось, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 	{
 		add(myExpr);//Значит это правило подходит, добавляем его, как ребёнок данного узла
 	}
@@ -17,7 +17,7 @@ Base_NeTerminal * operBlock::derivation(int * now_lex, Scaner * table, MyCheckVe
 		//<funcCall>
 		Base_NeTerminal *  myFuncCall = new funcCall(_now_lex, _All_table, this, "operBlock");
 
-		if (*myFuncCall->derivation(_now_lex, _All_table, _My_check) == true)
+		if (*myFuncCall->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)
 		{
 			add(myFuncCall);
 		}

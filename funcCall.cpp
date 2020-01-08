@@ -1,6 +1,6 @@
 #include "funcCall.h"
 
-Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check)
+Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table, MyCheckVector *_My_check, VectorOfOP * _MyVectorOp)
 {
 	//<funcCall> ::= <id>(<idSeq>)
 	Token lexem = _All_table->get_stream_of_token().get_table()[*_now_lex + 1];//Текущий терминал
@@ -11,7 +11,7 @@ Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table, MyCheckVec
 		//id
 		Base_NeTerminal *myid = new id(_now_lex, _All_table, this, "id");
 
-		if (*myid->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+		if (*myid->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 		{
 			add(myid);
 		}
@@ -46,7 +46,7 @@ Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table, MyCheckVec
 
 		//idSeq
 		Base_NeTerminal *myidSeq = new idSeq(_now_lex, _All_table, this, "idSeq");
-		if (*myidSeq->derivation(_now_lex, _All_table, _My_check) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
+		if (*myidSeq->derivation(_now_lex, _All_table, _My_check, _MyVectorOp) == true)//Если все последующие правила проходят, то всё ок) вызываем рекурсивно полиморфный метод и определяем по крайнему левому
 		{
 			add(myidSeq);
 		}
@@ -80,8 +80,10 @@ Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table, MyCheckVec
 			Error obg(err, this);
 		}
 
-		vector <Base_NeTerminal *>Myvector;
+
 		//Семантический блок проверка соответсвия типов.
+		vector <Base_NeTerminal *>Myvector;
+	
 		while (_My_check->get_MyCheck().back()->get_name() != "(")
 		{
 			Myvector.push_back(_My_check->get_MyCheck().back());
@@ -89,8 +91,10 @@ Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table, MyCheckVec
 		}
 		_My_check->get_MyCheck().pop_back();//Удаляем последний элемент
 
+		Base_NeTerminal * Id_func = _My_check->get_MyCheck().back();//Для генерации(id функции)
+		vector <Base_NeTerminal *> Vector_arg = Myvector;//Аргументы для генерации
 		//таким образом в Myvector имеем список аргументов а последний элемент _My_check - имя функции
-
+		
 		int num = _My_check->get_MyCheck().back()->get_num_inTdTable();
 		Identifier & itId = _All_table->get_table_of_identifier()[num];
 
@@ -149,6 +153,49 @@ Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table, MyCheckVec
 			}
 		}
 		//
+		//Блок генерации(выполнение функций)
+		//Base_NeTerminal * Id_func = _My_check->get_MyCheck().back();//Для генерации(id функции)
+		//vector <Base_NeTerminal *> Vector_arg;//Аргументы для генерации
+		if (Id_func->get_childs().back()->get_name() == "print")//Если функция print
+		{
+			//Печатаем все аргументы
+			//Проверка объявлены ли аргументы
+			for (auto arg : Vector_arg)
+			{
+				int num2 = arg->get_num_inTdTable();
+				Identifier & itId2 = _All_table->get_table_of_identifier()[num2];
+				if (itId2.get_value() != "")
+				{
+					cout << itId2.get_value();
+					_MyVectorOp->get_VectorOfOP().pop_back();
+				}
+				else
+				{
+					cout << "Идентификатор " << itId2.get_name() << " не Инициализирован" << endl;
+					system("pause");
+					//exit(0);
+				}
+			}
+			//
+			_MyVectorOp->get_VectorOfOP().pop_back();
+
+			cout << endl;
+		}
+
+		if (Id_func->get_childs().back()->get_name() == "length")//Если функция lenght
+		{
+			//Вычисляем значение и призваиваем идентификатору lenght
+			int n = Vector_arg.back()->get_num_inTdTable();
+			Identifier & itId2 = _All_table->get_table_of_identifier()[n];
+			int size = itId2.get_value().length();//длинна строки
+
+			string str = to_string(size);
+
+			 n = Id_func->get_num_inTdTable();
+			Identifier & itId3 = _All_table->get_table_of_identifier()[n];
+			itId3.set_value(str);
+			_MyVectorOp->get_VectorOfOP().pop_back();
+		}
 		return this;
 	}
 	else
