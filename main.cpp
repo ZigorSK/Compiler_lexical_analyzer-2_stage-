@@ -1,5 +1,4 @@
 #include"All_headers.h"
-#include"scaner.h"
 
 int main()
 {

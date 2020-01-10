@@ -160,24 +160,32 @@ Base_NeTerminal * funcCall::derivation(int * now_lex, Scaner * table, MyCheckVec
 		{
 			//Печатаем все аргументы
 			//Проверка объявлены ли аргументы
+			stack < string >myStack;
+
 			for (auto arg : Vector_arg)
 			{
 				int num2 = arg->get_num_inTdTable();
 				Identifier & itId2 = _All_table->get_table_of_identifier()[num2];
 				if (itId2.get_value() != "")
 				{
-					cout << itId2.get_value();
+					myStack.push(itId2.get_value());
 					_MyVectorOp->get_VectorOfOP().pop_back();
 				}
 				else
 				{
 					cout << "Идентификатор " << itId2.get_name() << " не Инициализирован" << endl;
 					system("pause");
-					//exit(0);
+					exit(0);
 				}
 			}
 			//
 			_MyVectorOp->get_VectorOfOP().pop_back();
+
+			while (!myStack.empty())
+			{
+				cout << myStack.top();
+				myStack.pop();
+			}
 
 			cout << endl;
 		}

@@ -1,12 +1,16 @@
-main(); 
+main();
 {
 	char a = 'H';
-	int i = 0;
+	int i = 0, aa = 6, bb= 3;
 	char b = 'i',z= 'i', t= 't', k= 'k', o= 'o', s= 's',  l = 'l' , p = ' ' ;
 	string c;
+	int resultat = 0;
 
+	resultat = 2*aa + (17/bb +2) +(5+6*3 +(aa + resultat)) *aa;
+	print(resultat);
 	c = a + b + p + z+t+ p+k+o+s+t+z+l;
 	i = length(c);
+	print(a, b, p, z, t, p, k, o, s, t, z, l);
 	print(c);//Вывод строки
 	print(i);//Вывод длинны строки
 	
